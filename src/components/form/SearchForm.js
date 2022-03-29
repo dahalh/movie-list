@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { Col, Form, Row, Button } from "react-bootstrap";
-import { CustomCard } from "../card/CustomCard";
 
-export const SearchForm = () => {
+export const SearchForm = ({ getMovie }) => {
   const [search, setSearch] = useState("");
 
   const handleOnChange = (e) => {
     const { value } = e.target;
-    console.log(value);
+    setSearch(value);
+    // console.log(value);
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
+    getMovie(search);
+    setSearch("");
   };
 
   return (
@@ -23,21 +25,17 @@ export const SearchForm = () => {
             <Form.Control
               placeholder="Search..."
               onChange={handleOnChange}
+              value={search}
               required
             />
           </Col>
           <Col>
-            <Button variant="warning" type="submit">
+            <Button variant="primary" type="submit">
               Search
             </Button>
           </Col>
         </Row>
       </Form>
-      <Row>
-        <Col className="d-flex justify-content-center">
-          <CustomCard />
-        </Col>
-      </Row>
     </>
   );
 };
