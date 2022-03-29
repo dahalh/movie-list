@@ -9,6 +9,7 @@ import { Title } from "./components/title/Title";
 
 const App = () => {
   const [movieList, setMovieList] = useState([]);
+  const [movieMainList, setMovieMainList] = useState([]);
   const [movie, setMovie] = useState({});
 
   const getMovie = async (search) => {
@@ -19,14 +20,13 @@ const App = () => {
 
   const handleOnAddToList = (cat, movie) => {
     const obj = { ...movie, cat };
-
     // adding movie the first time
-    !movieList.length && setMovieList([obj]);
-
+    !movieList.length && setMovieList([obj]) && setMovieMainList([obj]);
+    // adding after first time
     const isExist = movieList.find((item) => item.imdbID === movie.imdbID);
-
     if (!isExist) {
       setMovieList([...movieList, obj]);
+      setMovieMainList([...movieMainList, obj]);
       setMovie({});
     } else {
       alert("Movie already in list");
@@ -34,9 +34,23 @@ const App = () => {
   };
 
   const handleOnDelete = (imdbID) => {
-    const filteredList = movieList.filter((item) => item.imdbID !== imdbID);
+    const filteredList = movieMainList.filter((item) => item.imdbID !== imdbID);
     setMovieList(filteredList);
+    setMovieMainList(filteredList);
     // console.log(imdbID);
+  };
+
+  const handleOnSelect = (cat) => {
+    let filterArgs = [];
+    if (cat) {
+      filterArgs = movieMainList.filter((itm) => itm.cat === cat);
+    } else {
+      filterArgs = movieMainList;
+    }
+    setMovieList(filterArgs);
+    // happy selected
+    // lazy selected
+    // all selected
   };
 
   console.log(movieList);
@@ -56,7 +70,11 @@ const App = () => {
         </div>
 
         <hr />
-        <MovieList movieList={movieList} handleOnDelete={handleOnDelete} />
+        <MovieList
+          movieList={movieList}
+          handleOnDelete={handleOnDelete}
+          handleOnSelect={handleOnSelect}
+        />
       </Container>
     </div>
   );
