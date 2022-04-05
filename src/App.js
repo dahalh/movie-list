@@ -61,6 +61,7 @@ const App = () => {
         <MovieList
           movieList={moviesToDisplay}
           handleOnDelete={handleOnDelete}
+          setCategory={setCategory}
         />
       </Container>
     </div>
